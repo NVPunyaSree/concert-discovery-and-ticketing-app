@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ConcertHub - Home</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: white;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    nav a {
+      margin: 0 15px;
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .right-bar {
+      display: flex;
+      align-items: center;
+    }
+
+    .search-bar {
+      padding: 8px;
+      border-radius: 8px;
+      border: none;
+      margin-right: 15px;
+    }
+
+    .bell, .signin {
+      margin-left: 15px;
+      cursor: pointer;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      padding: 40px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      text-align: left;
+      position: relative;
+    }
+
+    .card button {
+      margin-top: 10px;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      background-color: #ffffff;
+      color: #6a11cb;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      padding: 0 40px 40px;
+    }
+
+    .features .card {
+      text-align: center;
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.7);
+    }
+
+    .modal-content {
+      background-color: #333;
+      margin: 5% auto;
+      padding: 20px;
+      border-radius: 15px;
+      width: 400px;
+      color: white;
+      text-align: center;
+    }
+
+    .seat-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .seat {
+      width: 40px;
+      height: 40px;
+      background-color: #666;
+      border-radius: 5px;
+      line-height: 40px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .seat.selected {
+      background-color: #00ff99;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    /* Payment Styles */
+    #seatSelectionInfo {
+      margin: 20px 0;
+      padding: 15px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+    }
+
+    #proceedToPayment {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      background: #00ff99;
+      color: #1a1a1a;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    #proceedToPayment:disabled {
+      background: #666;
+      cursor: not-allowed;
+    }
+
+    #paymentForm {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    #paymentForm input {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #666;
+      background: #444;
+      color: white;
+    }
+
+    #paymentSuccess {
+      text-align: center;
+      padding: 20px;
+    }
+
+    #paymentSuccess h3 {
+      color: #00ff99;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="logo">🎵 ConcertHub</div>
+    <nav>
+      <a href="#">Concerts</a>
+      <a href="#">Venues</a>
+      <a href="#">Artists</a>
+    </nav>
+    <div class="right-bar">
+      <input class="search-bar" type="text" placeholder="Search concerts..." />
+      <div class="bell">🔔</div>
+      <div class="signin" onclick="toggleForms('signin')">Sign In</div>
+    </div>
+  </header>
+
+  <!-- Concert Cards -->
+  <div class="grid">
+    <div class="card">
+      <h3>Taylor Swift</h3>
+      <p>📅 March 15, 2024<br>📍 Madison Square Garden<br>🎟️ 156 tickets available<br><strong>₹7,499</strong></p>
+      <button onclick="openSeatModal('Taylor Swift', 7499)">Book Seats</button>
+    </div>
+    <div class="card">
+      <h3>The Weeknd</h3>
+      <p>📅 March 20, 2024<br>📍 Staples Center<br>🎟️ 89 tickets available<br><strong>₹6,299</strong></p>
+      <button onclick="openSeatModal('The Weeknd', 6299)">Book Seats</button>
+    </div>
+    <div class="card">
+      <h3>Coldplay</h3>
+      <p>📅 March 25, 2024<br>📍 Wembley Stadium<br>🎟️ 234 tickets available<br><strong>₹8,999</strong></p>
+      <button onclick="openSeatModal('Coldplay', 8999)">Book Seats</button>
+    </div>
+  </div>
+
+  <h2 style="padding: 0 40px; margin-top: -20px;">🎤 Upcoming Events</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>Imagine Dragons</h3>
+      <p>📅 April 5, 2024<br>📍 O2 Arena, London<br>🎟️ 175 tickets available<br><strong>₹6,799</strong></p>
+    </div>
+    <div class="card">
+      <h3>Ed Sheeran</h3>
+      <p>📅 April 10, 2024<br>📍 Allianz Arena, Munich<br>🎟️ 120 tickets available<br><strong>₹7,299</strong></p>
+    </div>
+    <div class="card">
+      <h3>Arijit Singh</h3>
+      <p>📅 April 20, 2024<br>📍 NSCI Dome, Mumbai<br>🎟️ 310 tickets available<br><strong>₹5,999</strong></p>
+    </div>
+  </div>
+
+  <div class="features">
+    <div class="card">
+      <h3>📅 Easy Booking</h3>
+      <p>Book tickets in seconds with our streamlined process</p>
+    </div>
+    <div class="card">
+      <h3>📍 Venue Maps</h3>
+      <p>Interactive seating charts for the perfect view</p>
+    </div>
+    <div class="card">
+      <h3>🔔 Event Alerts</h3>
+      <p>Never miss a show with personalized notifications</p>
+    </div>
+  </div>
+
+  <!-- Seat Selection Modal -->
+  <div id="seatModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeSeatModal()">&times;</span>
+      <h2 id="concertTitle">Select Your Seats</h2>
+      <div class="seat-grid" id="seatGrid"></div>
+      <div id="seatSelectionInfo">
+        <p id="selectedSeats"></p>
+        <p id="totalPrice"></p>
+      </div>
+      <button id="proceedToPayment" onclick="openPaymentModal()" disabled>Proceed to Payment</button>
+    </div>
+  </div>
+
+  <!-- Payment Modal -->
+  <div id="paymentModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closePaymentModal()">&times;</span>
+      <h2>Complete Your Payment</h2>
+      <div id="paymentSummary">
+        <p id="paymentSeats"></p>
+        <p id="paymentTotal"></p>
+      </div>
+      <form id="paymentForm" onsubmit="handlePayment(event)">
+        <input type="text" placeholder="Card Number" required pattern="\d{16}" title="16-digit card number">
+        <input type="text" placeholder="MM/YY" required pattern="\d{2}/\d{2}" title="Expiration date (MM/YY)">
+        <input type="text" placeholder="CVV" required pattern="\d{3}" title="3-digit CVV">
+        <input type="email" placeholder="Email" required>
+        <button type="submit">Confirm Payment</button>
+      </form>
+      <div id="paymentSuccess" style="display: none;">
+        <h3>🎉 Payment Successful!</h3>
+        <p>Your tickets have been booked. Check your email for confirmation.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    // Search functionality
+    const searchInput = document.querySelector('.search-bar');
+    const concertCards = document.querySelectorAll('.grid .card');
+
+    searchInput.addEventListener('input', function () {
+      const query = this.value.toLowerCase();
+      concertCards.forEach(card => {
+        const content = card.textContent.toLowerCase();
+        card.style.display = content.includes(query) ? 'block' : 'none';
+      });
+    });
+
+    // Seat Selection Logic
+    let currentPrice = 0;
+    let selectedSeats = [];
+
+    function openSeatModal(concertName, price) {
+      currentPrice = price;
+      selectedSeats = [];
+      document.getElementById('concertTitle').textContent = `Select Seats for ${concertName}`;
+      document.getElementById('seatModal').style.display = 'block';
+      generateSeats();
+    }
+
+    function closeSeatModal() {
+      document.getElementById('seatModal').style.display = 'none';
+    }
+
+    function generateSeats() {
+      const seatGrid = document.getElementById('seatGrid');
+      seatGrid.innerHTML = '';
+      for (let i = 1; i <= 36; i++) {
+        const seat = document.createElement('div');
+        seat.className = 'seat';
+        seat.textContent = i;
+        seat.onclick = () => toggleSeatSelection(seat, i);
+        seatGrid.appendChild(seat);
+      }
+      updateSeatSelection();
+    }
+
+    function toggleSeatSelection(seat, seatNumber) {
+      seat.classList.toggle('selected');
+      const index = selectedSeats.indexOf(seatNumber);
+      if (index === -1) {
+        selectedSeats.push(seatNumber);
+      } else {
+        selectedSeats.splice(index, 1);
+      }
+      updateSeatSelection();
+    }
+
+    function updateSeatSelection() {
+      const total = selectedSeats.length * currentPrice;
+      document.getElementById('selectedSeats').textContent = `Selected Seats: ${selectedSeats.join(', ')}`;
+      document.getElementById('totalPrice').textContent = `Total: ₹${total}`;
+      document.getElementById('proceedToPayment').disabled = selectedSeats.length === 0;
+    }
+
+    // Payment Flow
+    function openPaymentModal() {
+      closeSeatModal();
+      document.getElementById('paymentModal').style.display = 'block';
+      document.getElementById('paymentSeats').textContent = `Seats: ${selectedSeats.join(', ')}`;
+      document.getElementById('paymentTotal').textContent = `Total: ₹${selectedSeats.length * currentPrice}`;
+    }
+
+    function closePaymentModal() {
+      document.getElementById('paymentModal').style.display = 'none';
+      document.getElementById('paymentForm').reset();
+      document.getElementById('paymentForm').style.display = 'block';
+      document.getElementById('paymentSuccess').style.display = 'none';
+    }
+
+    function handlePayment(event) {
+      event.preventDefault();
+      document.getElementById('paymentForm').style.display = 'none';
+      document.getElementById('paymentSuccess').style.display = 'block';
+      setTimeout(() => {
+        closePaymentModal();
+        selectedSeats = [];
+      }, 3000);
+    }
+
+    // Auth Toggle
+    function toggleForms(formType) {
+      const authContainer = document.getElementById('auth-container');
+      const signupForm = document.getElementById('signup-form');
+      const signinForm = document.getElementById('signin-form');
+      authContainer.style.display = 'block';
+      signupForm.style.display = formType === 'signup' ? 'block' : 'none';
+      signinForm.style.display = formType === 'signin' ? 'block' : 'none';
+    }
+  </script>
+</body>
+</html>
